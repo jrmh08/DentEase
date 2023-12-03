@@ -103,7 +103,25 @@ app.post("/register", (req, res) => {
 });
 
 
-///
+//APPOINTMENTS SIDE
+app.get('/getAppointments', (req, res) => {
+  db.query('SELECT * FROM `appointment_table`', (err, data) => {
+    console.log(data)
+    res.send(data)
+  })
+})
+
+app.post('/addAppointment', (req, res) => {
+  const { service, dentist, patient_name, phone_number, email, date, time, note, status } = req.body;
+  db.query('INSERT INTO `appointment_table` (`service`, `dentist`, `patient_name`, `phone_number`, `email`, `date`, `time`, `note`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, "pending")', [service, dentist, patient_name, phone_number, email, date, time, note, status], (err,data) => {
+    if (err) {
+      console.error("Error submitting appointment", err);
+      res.status(500).send("Error submitting appointment");
+    }
+    console.log(`Appointment added with ID: ${data.insertId}`);
+    res.status(200).send(`Appointment added with ID: ${data.insertId}`);
+  })
+})
 
 
 

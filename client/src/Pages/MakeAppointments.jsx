@@ -24,11 +24,11 @@ function MakeAppointments() {
   const [appointment, setAppointment] = useState({
     service: '',
     dentist: '',
-    patient: '',
-    phone: '',
+    patient_name: '',
+    phone_number: '',
     email: '',
-    selectedDate: null,
-    selectedTime: null,
+    date: null,
+    time: null,
     note: '',
   });
 
@@ -42,31 +42,62 @@ function MakeAppointments() {
   const handleDateChange = (date) => {
     setAppointment({
       ...appointment,
-      selectedDate: date,
+      date: date,
     });
   };
 
   const handleTimeChange = (time) => {
     setAppointment({
       ...appointment,
-      selectedTime: time,
+      time: time,
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Prepare the data to be sent to the server
     const formData = {
       service: appointment.service,
       dentist: appointment.dentist,
-      patient: appointment.patient,
-      phone: appointment.phone,
+      patient_name: appointment.patient_name,
+      phone_number: appointment.phone_number,
       email: appointment.email,
-      selectedDate: appointment.selectedDate?.format('YYYY-MM-DD'),
-      selectedTime: appointment.selectedTime?.format('HH:mm'),
+      date: appointment.date?.format('YYYY-MM-DD'),
+      time: appointment.time?.format('HH:mm'),
       note: appointment.note,
     };
-    console.log(formData);
-  };
+   
+    try {
+      // Make a POST request to the server using fetch
+      const response = await fetch('http://localhost:3000/addAppointment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+   
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+   
+      // Get the Content-Type header
+      const contentType = response.headers.get('content-type');
+   
+      if (contentType && contentType.includes('application/json')) {
+        // Parse the JSON response
+        const data = await response.json();
+        console.log(data);
+      } else {
+        // Handle the response as text
+        const text = await response.text();
+        console.log(text);
+      }
+   
+    } catch (error) {
+      console.error('Error submitting appointment:', error);
+      // Handle errors
+    }
+   };
 
   // useEffect(() => {
   //   console.log(appointment);
@@ -120,7 +151,7 @@ function MakeAppointments() {
                   label="Dentist"
                   onChange={handleChange('dentist')}
                 >
-                  <MenuItem value={"Shawn"}>Shawn Ryan Nacario</MenuItem>
+                  <MenuItem value={"shawn"}>Shawn Ryan Nacario</MenuItem>
                   <MenuItem value={"aisha"}>Aisha Manalo</MenuItem>
                   <MenuItem value={"gabriel"}>Gabriel Dela Cruz</MenuItem>
                   <MenuItem value={"jeremiah"}>Jeremiah Juinio</MenuItem>
@@ -128,12 +159,12 @@ function MakeAppointments() {
               </FormControl>
 
               <FormControl fullWidth>
-                <TextField sx={{ my: 2, bgcolor: 'white' }} label="Patient Name" variant="outlined" onChange={handleChange('patient')} />
+                <TextField sx={{ my: 2, bgcolor: 'white' }} label="Patient Name" variant="outlined" onChange={handleChange('patient_name')} />
               </FormControl>
 
               <Grid container columnSpacing={{ xs: '10px'}}>
                 <Grid item>
-                  <TextField sx={{ mb: 1, bgcolor: 'white' }} className="gridtxt" label="Phone" variant="outlined" onChange={handleChange('phone')} />
+                  <TextField sx={{ mb: 1, bgcolor: 'white' }} className="gridtxt" label="Phone" variant="outlined" onChange={handleChange('phone_number')} />
                 </Grid>
                 <Grid item>
                   <TextField sx={{ mb: 1, bgcolor: 'white' }} className="gridtxt" label="Email" variant="outlined" onChange={handleChange('email')} />
