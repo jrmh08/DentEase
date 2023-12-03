@@ -10,6 +10,7 @@ import ServicePage from "./Pages/OurServices";
 import LoginPage from "./Pages/LoginPage";
 import ProfilePage from "./Pages/CustomerProfile";
 import ContactPage from "./Pages/Contact";
+import MakeAppointments from "./Pages/MakeAppointments";
 
 import "./App.css";
 
@@ -33,6 +34,7 @@ function App() {
               <Route path="/service" element={<ServicePage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/appointments" element={<MakeAppointments />} />
             </>
           ) : (
             // If not authenticated, navigate to LoginPage
