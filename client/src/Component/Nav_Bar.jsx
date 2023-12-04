@@ -7,7 +7,7 @@ import { faUserCircle, faBell } from '@fortawesome/free-solid-svg-icons';
 import ProfilePage from '../Pages/CustomerProfile';
 import '../Styles/Nav_Bar.css';
 
-const NavBar = () => {
+const NavBar = ({notifications}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isNotificationsOpen, setNotificationsOpen] = useState(false);
@@ -24,6 +24,10 @@ const NavBar = () => {
 
   const toggleNotifications = () => {
     setNotificationsOpen(!isNotificationsOpen);
+  };
+
+  const clearNotifications = () => {
+    setNotifications([]);
   };
 
   return (
@@ -74,10 +78,9 @@ const NavBar = () => {
 
           {isNotificationsOpen && (
             <div className="notifications-dropdown" aria-labelledby="notificationsDropdown">
-              {/* Add your notifications content here */}
-              <p>You have successfully booked in 0/1/23.</p>
-              <p>You cancelled your booking!</p>
-              <p>Your booking has been declined!</p>
+              {notifications.map((notification, index) => (
+                <p key={index}>{notification}</p>
+              ))}
             </div>
           )}
         </div>

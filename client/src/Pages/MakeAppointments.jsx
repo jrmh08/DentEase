@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import appdentist from '../../pictures/appdentist.jpg';
 import dentistself from '../../pictures/dentistself.png';
 import '../Styles/MakeAppointments.css';
@@ -38,14 +38,14 @@ function MakeAppointments() {
       [field]: event.target.value,
     });
   };
-
+//FOR DATE CHANGES
   const handleDateChange = (date) => {
     setAppointment({
       ...appointment,
       date: date,
     });
   };
-
+//FOR TIME CHANGES
   const handleTimeChange = (time) => {
     setAppointment({
       ...appointment,
@@ -53,8 +53,45 @@ function MakeAppointments() {
     });
   };
 
+  //FOR NOTIFICATIONS
+  const [notifications, setNotifications] = useState(['No New Notifications']);
+
+  //FOR APPOINTMENT SUBMISSION WITH CONDITIONS
   const handleSubmit = async () => {
-    // Prepare the data to be sent to the server
+    // Validate phone number length
+    if (appointment.phone_number.length !== 11) {
+      console.error('Phone number must be 11 digits');
+      alert('Phone number must be 11 digits');
+      return;
+    }
+  
+    // Validate email format
+    if (!isValidEmail(appointment.email)) {
+      console.error('Invalid email format');
+      alert('Invalid email format');
+      return;
+    }
+
+
+    // Validate day is not Sunday
+    const selectedDate = appointment.date;
+    if (selectedDate && selectedDate.day() === 0) {
+      console.error('We cannot book appointments on Sundays');
+      alert('We cannot book appointments on Sundays');
+      return;
+    }
+
+    // Validate time is between 9am to 4pm
+    const selectedTime = appointment.time;
+    const startTime = selectedTime.clone().startOf('day').add(9, 'hours');
+    const endTime = selectedTime.clone().startOf('day').add(16, 'hours');
+    if (!selectedTime.isBetween(startTime, endTime)) {
+      console.error('Appointment time must be between 9am to 4pm');
+      alert('Appointment time must be between 9am to 4pm');
+      return;
+    }
+
+    // All conditions passed, proceed with form submission
     const formData = {
       service: appointment.service,
       dentist: appointment.dentist,
@@ -65,9 +102,8 @@ function MakeAppointments() {
       time: appointment.time?.format('HH:mm'),
       note: appointment.note,
     };
-   
+
     try {
-      // Make a POST request to the server using fetch
       const response = await fetch('http://localhost:3000/addAppointment', {
         method: 'POST',
         headers: {
@@ -75,37 +111,38 @@ function MakeAppointments() {
         },
         body: JSON.stringify(formData),
       });
-   
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-   
-      // Get the Content-Type header
+
       const contentType = response.headers.get('content-type');
-   
+
       if (contentType && contentType.includes('application/json')) {
-        // Parse the JSON response
         const data = await response.json();
         console.log(data);
       } else {
-        // Handle the response as text
         const text = await response.text();
         console.log(text);
       }
-   
+      alert('Appointment Submission Successful');
+      // Update notifications state upon successful submission
+      setNotifications(['Appointment submitted successfully', ...notifications.filter(notif => notif !== 'No new notifications')]);
+
     } catch (error) {
       console.error('Error submitting appointment:', error);
-      // Handle errors
     }
-   };
+  };
 
-  // useEffect(() => {
-  //   console.log(appointment);
-  // }, [appointment]);
+  // Email validation function
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   return (
     <div className="appointments-page">
-      <NavBar />
+      <NavBar notifications={notifications} />
         <div className="top-area">
           <h1>Make Appointments</h1>
           <img className="img-container" src={appdentist} alt="dentist" />
