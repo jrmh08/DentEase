@@ -11,6 +11,7 @@ import LoginPage from "./Pages/LoginPage";
 import ProfilePage from "./Pages/CustomerProfile";
 import ContactPage from "./Pages/Contact";
 import MakeAppointments from "./Pages/MakeAppointments";
+import Admin_Page from "./Pages/AdminPage";
 
 import "./App.css";
 
