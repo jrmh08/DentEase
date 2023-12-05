@@ -3,20 +3,20 @@ body {
     background-color: white;
     width: 100%;
     margin: 0;
-  }
+}
 
 .top-area{
     box-sizing: border-box;
     width: 100%;
 }
 
-h1 {
+.appHeader { /*change className*/
     position: absolute;
     top: 50vh;
     left: 7%;
     z-index: 1;
     text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.8);
-  }
+}
 
 .appointment-area{
     width: 100%;
@@ -27,7 +27,7 @@ h1 {
     height: 1000px;
 }
 
-input {
+input { /*change className*/
     width: 200px;
 }
 
@@ -35,11 +35,11 @@ input {
     height: 600px;
 }
 
-.img-container{
+.img-container{ /*change className*/
     width: 100%;
 }
 
-.form-container{
+.form-container{ /*change className*/
     background-color: #F3F7FA;
     color: black;
     width: fit-content;
@@ -56,10 +56,10 @@ input {
     width: 245px;
 }
 
-h4{
+h4{ /*change className*/
     text-align: left;
 }
 
-.service{
+.service{ /*change className*/
     margin-top: 0;
 }

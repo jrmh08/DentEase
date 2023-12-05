@@ -35,6 +35,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/appointments" element={<MakeAppointments />} />
+              <Route path="/admin" element={<Admin_Page />} />
             </>
           ) : (
             // If not authenticated, navigate to LoginPage

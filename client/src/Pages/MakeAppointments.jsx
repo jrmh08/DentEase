@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import appdentist from '../../pictures/appdentist.jpg';
 import dentistself from '../../pictures/dentistself.png';
 import '../Styles/MakeAppointments.css';
-import * as React from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,12 +11,19 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 
 function MakeAppointments() {
@@ -32,65 +38,109 @@ function MakeAppointments() {
     note: '',
   });
 
+  const [errors, setErrors] = useState({
+    phone_number: false,
+    email: false,
+    date: false,
+    time: false,
+  });
+
+  const [isFormValid, setFormValid] = useState(true);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Added state for Snackbar
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  
   const handleChange = (field) => (event) => {
+    setFormValid(true); // Reset form validation state
+
     setAppointment({
       ...appointment,
       [field]: event.target.value,
     });
   };
 //FOR DATE CHANGES
-  const handleDateChange = (date) => {
+  const handleDateTimeChange = (value, field) => {
     setAppointment({
       ...appointment,
-      date: date,
-    });
-  };
-//FOR TIME CHANGES
-  const handleTimeChange = (time) => {
-    setAppointment({
-      ...appointment,
-      time: time,
+      [field]: value,
     });
   };
 
   //FOR NOTIFICATIONS
   const [notifications, setNotifications] = useState(['No New Notifications']);
 
+  const errorMessages = {
+    phone_number: 'Phone number must be 11 digits',
+    email: 'Invalid email format',
+    date: 'No Appointments on Sundays',
+    time: 'Time only between 9am to 4pm',
+  };
+
   //FOR APPOINTMENT SUBMISSION WITH CONDITIONS
   const handleSubmit = async () => {
-    // Validate phone number length
-    if (appointment.phone_number.length !== 11) {
-      console.error('Phone number must be 11 digits');
-      alert('Phone number must be 11 digits');
-      return;
-    }
+      for (const field in appointment) {
+        if (field !== 'note' && !appointment[field]) {
+          setSnackbarOpen(true);
+          setSnackbarMessage('Please fill in all fields and correct any errors.');
+          return;
+        }
+      }
+    
+      // Validate phone number length
+      if (appointment.phone_number.length !== 11) {
+        console.error('Phone number must be 11 digits');
+        setFormValid(false);
+        setErrors({
+          ...errors,
+          phone_number: true,
+        });
+        setSnackbarOpen(true);
+        setSnackbarMessage('Phone number must be 11 digits');
+        return;
+      }
+    
+      // Validate email format
+      if (!isValidEmail(appointment.email)) {
+        console.error('Invalid email format');
+        setFormValid(false);
+        setErrors({
+          ...errors,
+          email: true,
+        });
+        setSnackbarOpen(true);
+        setSnackbarMessage('Invalid email format');
+        return;
+      }
+    
+      // Validate day is not Sunday
+      const selectedDate = appointment.date;
+      if (selectedDate && selectedDate.day() === 0) {
+        console.error('No booking appointments on Sundays');
+        setFormValid(false);
+        setErrors({
+          ...errors,
+          date: true,
+        });
+        setSnackbarOpen(true);
+        setSnackbarMessage('No booking appointments on Sundays');
+        return;
+      }
+    
+      // Validate time is between 9am to 4pm
+      const selectedTime = appointment.time;
+      const startTime = selectedTime.clone().startOf('day').add(9, 'hours');
+      const endTime = selectedTime.clone().startOf('day').add(16, 'hours');
+      if (!(selectedTime.isSame(startTime) || (selectedTime.isAfter(startTime) && selectedTime.isBefore(endTime)) || selectedTime.isSame(endTime))) {
+        console.error('Appointment time must be between 9am to 4pm');
+        setFormValid(false);
+        setErrors({
+          ...errors,
+          time: true,
+        });
+        setSnackbarOpen(true);
+        setSnackbarMessage('Appointment time must be between 9am to 4pm');
+        return;
+      }
   
-    // Validate email format
-    if (!isValidEmail(appointment.email)) {
-      console.error('Invalid email format');
-      alert('Invalid email format');
-      return;
-    }
-
-
-    // Validate day is not Sunday
-    const selectedDate = appointment.date;
-    if (selectedDate && selectedDate.day() === 0) {
-      console.error('We cannot book appointments on Sundays');
-      alert('We cannot book appointments on Sundays');
-      return;
-    }
-
-    // Validate time is between 9am to 4pm
-    const selectedTime = appointment.time;
-    const startTime = selectedTime.clone().startOf('day').add(9, 'hours');
-    const endTime = selectedTime.clone().startOf('day').add(16, 'hours');
-    if (!selectedTime.isBetween(startTime, endTime)) {
-      console.error('Appointment time must be between 9am to 4pm');
-      alert('Appointment time must be between 9am to 4pm');
-      return;
-    }
-
     // All conditions passed, proceed with form submission
     const formData = {
       service: appointment.service,
@@ -102,7 +152,7 @@ function MakeAppointments() {
       time: appointment.time?.format('HH:mm'),
       note: appointment.note,
     };
-
+  
     try {
       const response = await fetch('http://localhost:3000/addAppointment', {
         method: 'POST',
@@ -111,13 +161,13 @@ function MakeAppointments() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
+  
       const contentType = response.headers.get('content-type');
-
+  
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
         console.log(data);
@@ -125,12 +175,20 @@ function MakeAppointments() {
         const text = await response.text();
         console.log(text);
       }
-      alert('Appointment Submission Successful');
+  
       // Update notifications state upon successful submission
-      setNotifications(['Appointment submitted successfully', ...notifications.filter(notif => notif !== 'No new notifications')]);
-
+      setNotifications(['Appointment submitted successfully', ...notifications.filter(notif => notif !== 'No New Notifications')]);
+      setFormValid(true);
+  
+      // Show success message in Snackbar
+      setSnackbarOpen(true);
+      setSnackbarMessage('Form submitted successfully.');
+  
     } catch (error) {
       console.error('Error submitting appointment:', error);
+      // Show error message in Snackbar
+      setSnackbarOpen(true);
+      setSnackbarMessage('Error submitting appointment. Please try again later.');
     }
   };
 
@@ -140,11 +198,19 @@ function MakeAppointments() {
     return emailRegex.test(email);
   };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return (
     <div className="appointments-page">
       <NavBar notifications={notifications} />
         <div className="top-area">
-          <h1>Make Appointments</h1>
+          <h1 className="appHeader">Make Appointments</h1>
           <img className="img-container" src={appdentist} alt="dentist" />
         </div>
         <div className="appointment-area">
@@ -196,27 +262,84 @@ function MakeAppointments() {
               </FormControl>
 
               <FormControl fullWidth>
-                <TextField sx={{ my: 2, bgcolor: 'white' }} label="Patient Name" variant="outlined" onChange={handleChange('patient_name')} />
+                <TextField 
+                  sx={{ my: 2, bgcolor: 'white' }} 
+                  label="Patient Name" 
+                  variant="outlined" 
+                  onChange={handleChange('patient_name')} 
+                />
               </FormControl>
 
               <Grid container columnSpacing={{ xs: '10px'}}>
                 <Grid item>
-                  <TextField sx={{ mb: 1, bgcolor: 'white' }} className="gridtxt" label="Phone" variant="outlined" onChange={handleChange('phone_number')} />
+                  <TextField
+                    sx={{ mb: 1, bgcolor: 'white' }}
+                    className="gridtxt"
+                    label="Phone"
+                    variant="outlined"
+                    onChange={handleChange('phone_number')}
+                    error={errors.phone_number}
+                    helperText={errors.phone_number && errorMessages.phone_number}
+                  />
                 </Grid>
                 <Grid item>
-                  <TextField sx={{ mb: 1, bgcolor: 'white' }} className="gridtxt" label="Email" variant="outlined" onChange={handleChange('email')} />
+                  <TextField
+                    sx={{ mb: 1, bgcolor: 'white' }}
+                    className="gridtxt"
+                    label="Email"
+                    variant="outlined"
+                    onChange={handleChange('email')}
+                    error={errors.email}
+                    helperText={errors.email && errorMessages.email}
+                  />
                 </Grid>
                 <Grid item>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['MobileDatePicker']}>
-                      <MobileDatePicker sx={{ bgcolor: 'white'}} className="gridpicker" label="Select Date" onChange={handleDateChange}/>
+                      <FormControl
+                        sx={{ m: 1, minWidth: 120, bgcolor: 'white' }}
+                        error={errors.date}
+                      >
+                        <MobileDatePicker
+                          className="gridpicker"
+                          label="Select Date"
+                          onChange={(date) => handleDateTimeChange(date, 'date')}
+                          value={appointment.date}
+                          textField={({ inputRef, ...others }) => (
+                            <TextField
+                              {...others}
+                              InputLabelProps={{ shrink: true }}
+                              inputRef={inputRef}
+                            />
+                          )}
+                        />
+                        {errors.date && <FormHelperText>No Appointments on Sundays</FormHelperText>}
+                      </FormControl>
                     </DemoContainer>
                   </LocalizationProvider>
                 </Grid>
+
                 <Grid item>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['MobileTimePicker']}>
-                      <MobileTimePicker sx={{ bgcolor: 'white'}} className="gridpicker" label="Select Time" onChange={handleTimeChange}/>
+                      <FormControl
+                        sx={{ m: 1, minWidth: 120, bgcolor: 'white' }}
+                        error={errors.time}
+                      >
+                        <MobileTimePicker
+                          label="Select Time"
+                          onChange={(time) => handleDateTimeChange(time, 'time')}
+                          value={appointment.time}
+                          textField={({ inputRef, ...others }) => (
+                            <TextField
+                              {...others}
+                              InputLabelProps={{ shrink: true }}
+                              inputRef={inputRef}
+                            />
+                          )}
+                        />
+                        {errors.time && <FormHelperText>Time only between 9am to 4pm</FormHelperText>}
+                      </FormControl>
                     </DemoContainer>
                   </LocalizationProvider>
                 </Grid>
@@ -236,6 +359,31 @@ function MakeAppointments() {
           </div>
         </div>
         <Footer />
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={10000}
+          onClose={handleCloseSnackbar}
+          message={isFormValid ? snackbarMessage : 'Please fill in all fields and correct any errors.'}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+              sx={{
+                position: 'absolute',
+                right: 1,
+                top: 8,
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
+        />
     </div>
   );
 }

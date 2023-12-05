@@ -46,7 +46,7 @@ const NavBar = ({notifications}) => {
           <li className={activePage === '/about' ? 'active' : ''}><Link to="/about">About</Link></li>
           <li className={activePage === '/service' ? 'active' : ''}><Link to="/service">Services</Link></li>
           <li className={activePage === '/contact' ? 'active' : ''}><Link to="/contact">Contact</Link></li>
-          <li><a href="#">Make an Appointment</a></li>
+          <li className={activePage === '/appointments' ? 'active' : ''}><Link to="/appointments">Make an Appointment</Link></li>
         </ul>
 
         <div className="dropdown">
