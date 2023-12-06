@@ -114,7 +114,7 @@ const DentistPage = () => {
               <th>Time</th>
               <th>Note</th>
               <th>Status</th>
-              <th>Edit</th>
+              <th>Change Status</th>
             </tr>
           </thead>
           <tbody>

@@ -86,7 +86,7 @@ const NavBar = ({ notifications }) => {
           <li className={activePage === '/' ? 'active' : ''}><Link to="/home">Home</Link></li>
 
           {userType === 'Admin' && (
-            <li className={activePage === '/admin' ? 'active' : ''}><Link to="/admin">Admin</Link></li>
+            <li className={activePage === '/admin' ? 'active' : ''}><Link to="/admin">Appointment Manager</Link></li>
           )}
 
           {userType === 'Dentist' && (
