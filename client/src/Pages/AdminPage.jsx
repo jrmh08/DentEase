@@ -63,6 +63,8 @@ const Admin_Page = () => {
       });
   
       if (response.ok) {
+        const newNotification = `Appointment ID: ${appointment.appointment_id} deleted successfully`;
+        setNotifications([newNotification, ...notifications.filter(notif => notif !== 'No New Notifications')]);
         console.log('Appointment deleted successfully');
       } else {
         console.error('Error deleting appointment:', response.statusText);
@@ -89,6 +91,7 @@ const Admin_Page = () => {
               <th>Date</th>
               <th>Time</th>
               <th>Note</th>
+              <th>Status</th>
               <th>Delete</th>
             </tr>
           </thead>
@@ -104,6 +107,7 @@ const Admin_Page = () => {
                 <td>{appointment.date}</td>
                 <td>{appointment.time}</td>
                 <td>{appointment.note}</td>
+                <td>{appointment.status}</td>
                
                 <td>
   {isEditing && selectedAppointment === appointment ? (

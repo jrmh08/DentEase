@@ -5,7 +5,7 @@ import Footer from '../Component/Footer';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-const DoctorPage = () => {
+const DentistPage = () => {
   const [notifications, setNotifications] = useState(['No New Notifications']);
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -33,9 +33,11 @@ const DoctorPage = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setIsEditing(false);
-    handleEditFormSubmit();
+    console.log(selectedAppointment.appointment_id);
+    await handleEditFormSubmit();
+    await updateAppStatus(selectedAppointment.appointment_id, editedStatus);
   };
 
   const handleEditFormSubmit = () => {
@@ -70,7 +72,29 @@ const DoctorPage = () => {
     } catch (error) {
       console.error('Error updating appointment:', error);
     }
-   };
+  };
+
+  const updateAppStatus = async (appointmentId, status) => {
+    try {
+      const response = await fetch(`http://localhost:3000/updateAppStatus/${appointmentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      if (response.ok) {
+        const newNotification = `Appointment ID: ${appointmentId} changed status to ${status}`;
+        setNotifications([newNotification, ...notifications.filter(notif => notif !== 'No New Notifications')]);
+        console.log('Appointment status updated successfully');
+      } else {
+        console.error('Error updating appointment status:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+    }
+  };
    
 
   return (
@@ -111,8 +135,8 @@ const DoctorPage = () => {
                       value={editedStatus}
                       onChange={(e) => setEditedStatus(e.target.value)}
                     >
-                      <MenuItem value="Approved">Approved</MenuItem>
-                      <MenuItem value="Declined">Declined</MenuItem>
+                      <MenuItem value="APPROVED">Approved</MenuItem>
+                      <MenuItem value="DECLINED">Declined</MenuItem>
                     </Select>
                   ) : (
                     appointment.status
@@ -135,4 +159,4 @@ const DoctorPage = () => {
   );
 };
 
-export default DoctorPage;
+export default DentistPage;

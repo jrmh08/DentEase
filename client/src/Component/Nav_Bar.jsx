@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faBell } from '@fortawesome/free-solid-svg-icons';
+import Badge from '@mui/material/Badge';
 import '../Styles/Nav_Bar.css';
 
 
@@ -16,11 +17,10 @@ const NavBar = ({ notifications }) => {
   const [isNotificationsOpen, setNotificationsOpen] = useState(false);
   const [activePage, setActivePage] = useState('');
   const [userType, setUserType] = useState('');
+  const [hasNewNotifications, setHasNewNotifications] = useState(false); // New state for tracking new notifications
   const location = useLocation();
 
   useEffect(() => {
-    setActivePage(location.pathname);
-
     const fetchUserType = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -47,14 +47,28 @@ const NavBar = ({ notifications }) => {
     };
 
     fetchUserType();
-  }, [location.pathname]);
+  }, []); 
+
+  useEffect(() => {
+    setActivePage(location.pathname);
+
+    const hasNew =
+      notifications.length > 0 &&
+      notifications.some((notification) => notification !== 'No New Notifications');
+
+    setHasNewNotifications(hasNew);
+  }, [location.pathname, notifications]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
+    // Mark notifications as read when the dropdown is opened
+    setHasNewNotifications(false);
   };
 
   const toggleNotifications = () => {
     setNotificationsOpen(!isNotificationsOpen);
+    // Mark notifications as read when the notifications dropdown is opened
+    setHasNewNotifications(false);
   };
 
   return (
@@ -71,16 +85,12 @@ const NavBar = ({ notifications }) => {
         <ul className={`menu-items ${isMenuOpen ? 'open' : ''}`}>
           <li className={activePage === '/' ? 'active' : ''}><Link to="/home">Home</Link></li>
 
-          {userType === 'admin' && (
-            <li className={activePage === '/admin' ? 'active' : ''}>
-              <Link to="/admin">Admin</Link>
-            </li>
+          {userType === 'Admin' && (
+            <li className={activePage === '/admin' ? 'active' : ''}><Link to="/admin">Admin</Link></li>
           )}
 
-          {userType === 'doctor' && (
-            <li className={activePage === '/doctors' ? 'active' : ''}>
-              <Link to="/dentist">Appointments</Link>
-            </li>
+          {userType === 'Dentist' && (
+            <li className={activePage === '/dentist' ? 'active' : ''}><Link to="/dentist">Appointments</Link></li>
           )}
 
           <li className={activePage === '/about' ? 'active' : ''}><Link to="/about">About</Link></li>
@@ -95,7 +105,13 @@ const NavBar = ({ notifications }) => {
             id="notificationsDropdown"
             onClick={toggleNotifications}
           >
+            <Badge
+              color="error"
+              variant="dot"
+              invisible={!hasNewNotifications}
+            >
             <FontAwesomeIcon icon={faBell} />
+            </Badge>
           </button>
 
           <button

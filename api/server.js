@@ -128,7 +128,7 @@ app.post("/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(registerPassword, 10);
 
         // Insert the user into the database with the hashed password
-        const insertUserQuery = "INSERT INTO `login/register` (user_name, user_phone, user_email, user_password, user_type) VALUES (?, ?, ?, ?, 'patient')";
+        const insertUserQuery = "INSERT INTO `login/register` (user_name, user_phone, user_email, user_password, user_type) VALUES (?, ?, ?, ?, 'Patient')";
         db.query(insertUserQuery, [registerUsername, registerPhoneNumber, registerEmail, hashedPassword, userType], (err, result) => {
           if (err) {
             console.error("Error registering user:", err);
@@ -160,7 +160,7 @@ app.post("/register", async (req, res) => {
   });
 });
 
-// New endpoint to get user data
+//GETTING USER DETAILS FOR THE PROFILE PAGE
 app.get('/getUser', (req, res) => {
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
@@ -213,39 +213,9 @@ app.post('/addAppointment', (req, res) => {
   })
 })
 
-app.get('/getUser', (req, res) => {
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-  console.log(token);
-
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  try {
-    const decodedToken = jwt.verify(token, secretKey);
-
-    const { userId, userEmail, userName, userPhone } = decodedToken;
-
-    res.status(200).json({
-      userId,
-      userName,
-      userEmail,
-      userPhone,
-    });
-  } catch (error) {
-    console.error('Error decoding token:', error);
-    res.status(401).json({ message: 'Unauthorized' });
-  }
-});
-
-
-
-
- //// CHECKPOINT
-
-
- app.get('/getAllAppointments', (req, res) => {
+//FOR GETTING ALL THE APPOINTMENTS
+app.get('/getAllAppointments', (req, res) => {
   db.query('SELECT * FROM `appointment_table`', (err, data) => {
     if (err) {
       console.error('Error retrieving appointments:', err);
@@ -257,11 +227,7 @@ app.get('/getUser', (req, res) => {
 });
 
 
-
-
-
-
-
+//FOR DELETING APPOINTMENTS
 app.delete('/deleteAppointment/:id', (req, res) => {
   const appointmentId = req.params.id;
 
@@ -277,6 +243,20 @@ app.delete('/deleteAppointment/:id', (req, res) => {
 });
 
 
+
+app.put('/updateAppStatus/:appointment_id', (req, res) => {
+  const { status } = req.body;
+  const { appointment_id } = req.params; // Corrected variable name here
+  db.query('UPDATE `appointment_table` SET `status` = ? WHERE `appointment_id` = ?', [status, appointment_id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error updating appointment status');
+    } else {
+      console.log(`Appointment updated to: ${status}`);
+      res.status(200).send(`Appointment updated with ID: ${appointment_id}`);
+    }
+  });
+});
 
 
 

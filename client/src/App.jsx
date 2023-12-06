@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import NavBar from "./Component/Nav_Bar";
@@ -37,8 +36,7 @@ function App() {
               <Route path="/service" element={<ServicePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/appointments" element={<MakeAppointments />} />
-
-               <Route path="/dentist" element={<DentistPage />} />
+              <Route path="/dentist" element={<DentistPage />} />
 
 
 
