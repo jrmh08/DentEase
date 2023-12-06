@@ -1,7 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import NavBar from "./Component/Nav_Bar";
-import Footer from "./Component/Footer";
 import Homepage from "./Pages/Home_Page";
 import AboutUs from "./Pages/About_Us";
 import DentistsPage from "./Pages/Dentists";
