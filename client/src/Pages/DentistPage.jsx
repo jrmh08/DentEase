@@ -135,8 +135,8 @@ const DentistPage = () => {
                       value={editedStatus}
                       onChange={(e) => setEditedStatus(e.target.value)}
                     >
-                      <MenuItem value="APPROVED">Approved</MenuItem>
-                      <MenuItem value="DECLINED">Declined</MenuItem>
+                      <MenuItem value="APPROVED">APPROVED</MenuItem>
+                      <MenuItem value="DECLINED">DECLINED</MenuItem>
                     </Select>
                   ) : (
                     appointment.status

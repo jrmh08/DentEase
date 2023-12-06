@@ -93,8 +93,6 @@ function MakeAppointments() {
           ...errors,
           phone_number: true,
         });
-        setSnackbarOpen(true);
-        setSnackbarMessage('Phone number must be 11 digits');
         return;
       }
     
@@ -106,8 +104,6 @@ function MakeAppointments() {
           ...errors,
           email: true,
         });
-        setSnackbarOpen(true);
-        setSnackbarMessage('Invalid email format');
         return;
       }
     
@@ -120,8 +116,6 @@ function MakeAppointments() {
           ...errors,
           date: true,
         });
-        setSnackbarOpen(true);
-        setSnackbarMessage('No booking appointments on Sundays');
         return;
       }
     
@@ -136,8 +130,6 @@ function MakeAppointments() {
           ...errors,
           time: true,
         });
-        setSnackbarOpen(true);
-        setSnackbarMessage('Appointment time must be between 9am to 4pm');
         return;
       }
   
