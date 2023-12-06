@@ -5,6 +5,8 @@ import Footer from '../Component/Footer';
 import '../Styles/CustomerProfile.css';
 
 const ProfilePage = () => {
+  const [notifications, setNotifications] = useState(['No New Notifications']);
+  
   const [userInfo, setUserInfo] = useState({
     user_ID: '',
     Name: '',
@@ -79,7 +81,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page-container">
-      <NavBar />
+      <NavBar notifications={notifications} />
       <div className="profile-container">
         <div className="profile-header-container">
           <div className="profile-info-container">

@@ -4,6 +4,7 @@ import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
 
 const Homepage = () => {
+  const [notifications, setNotifications] = useState(['No New Notifications']);
   const images = [
     'https://cdn.discordapp.com/attachments/698869917235019828/1179515281035505895/Dentist_2.jpg?ex=657a1035&is=65679b35&hm=f752e3cc628f9923c1b3f072a5b56f934cef85d17c2e47438eac5a5a22b97afe&',
     'https://cdn.discordapp.com/attachments/698869917235019828/1179515281354268752/Dentist_3.jpg?ex=657a1035&is=65679b35&hm=462da9e6c71da59b8118564317d9c0f9ce0b21f512e908a14ed9e15a63df2aae&',
@@ -31,7 +32,7 @@ const Homepage = () => {
   return (
     <div className="HomePage-container">
       {/* Top Section */}
-      <NavBar />
+      <NavBar notifications={notifications} />
 
       <div className="homepage-carousel-container">
         <div className="homepage-text-container">

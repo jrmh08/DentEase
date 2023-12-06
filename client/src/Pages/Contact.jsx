@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Styles/Contact.css';
 import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
 
 const ContactPage = () => {
+  const [notifications, setNotifications] = useState(['No New Notifications']);
+
   return (
     <div className="contact-container">
-      <NavBar/>
+      <NavBar notifications={notifications} />
       <div className="contact-heading">
         <h2>Contact DentEase Dental Clinic</h2>
         <p>We'd Love to Hear from You! Call (+63) 927 815 7638</p>

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Styles/About_Us.css';
 import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
 
 const AboutUs = () => {
+  const [notifications, setNotifications] = useState(['No New Notifications']);
+
   return (
     
     <div className="home-page">
-      <NavBar />
+      <NavBar notifications={notifications} />
       <div className="content-container">
         <div className="text-column">
 

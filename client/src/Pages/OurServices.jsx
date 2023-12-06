@@ -4,6 +4,7 @@ import '../Styles/OurServices.css';
 import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
 const ServicePage = () => {
+  const [notifications, setNotifications] = useState(['No New Notifications']);
  const dentists = [
    {
      name: 'Aisha B. Malinao',
@@ -64,7 +65,7 @@ const ServicePage = () => {
  return (
   
    <div className="dentists-page">
-<NavBar />
+<NavBar notifications={notifications} />
      <h1>Meet the Dentists at DentEase Dental Clinic</h1>
      <p className='dentist-paragraph'>Seamless Smiles, Effortless Appointments</p>
      <div className="dentists-container">
