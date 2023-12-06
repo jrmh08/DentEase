@@ -5,21 +5,19 @@ import Footer from '../Component/Footer';
 import '../Styles/CustomerProfile.css';
 
 const ProfilePage = () => {
-  const [notifications, setNotifications] = useState(['No New Notifications']);
-  
   const [userInfo, setUserInfo] = useState({
     user_ID: '',
     Name: '',
     Email: '',
     PhoneNo: '',
+    UserType: '',
   });
 
   useEffect(() => {
-    console.log("sadddd");
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token');
-      console.log(token);
-
+      console.log('Token:', token);
+    
       if (token) {
         try {
           const response = await fetch('http://localhost:3000/getUser', {
@@ -28,14 +26,19 @@ const ProfilePage = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response);
+    
+          console.log('Response:', response);
+    
           if (response.ok) {
             const data = await response.json();
+            console.log('Fetched user data:', data);
+    
             setUserInfo({
               user_ID: data.userId,
               Name: data.userName,
               Email: data.userEmail,
               PhoneNo: data.userPhone,
+              UserType: data.user_type,
             });
           } else {
             console.error('Failed to fetch user information');
@@ -81,7 +84,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page-container">
-      <NavBar notifications={notifications} />
+      <NavBar />
       <div className="profile-container">
         <div className="profile-header-container">
           <div className="profile-info-container">
@@ -94,17 +97,19 @@ const ProfilePage = () => {
             </div>
             <div className="profile-text-container">
               <p>{userInfo.Name}</p>
-              <p>Status: Patient</p>
+              <p>User Type: {userInfo.UserType}</p>
             </div>
           </div>
         </div>
         <div className="profile-details-container">
           <div className="details-column">
             {Object.entries(userInfo).map(([key, value]) => (
-              <div className="detail-row" key={key}>
-                <label className="detail-label">{key}:</label>
-                <span className="detail-text">{value}</span>
-              </div>
+              key !== 'UserType' && (
+                <div className="detail-row" key={key}>
+                  <label className="detail-label">{key}:</label>
+                  <span className="detail-text">{value}</span>
+                </div>
+              )
             ))}
           </div>
         </div>

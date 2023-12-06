@@ -5,7 +5,7 @@ import Footer from '../Component/Footer';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-const Admin_Page = () => {
+const DoctorPage = () => {
   const [notifications, setNotifications] = useState(['No New Notifications']);
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -38,40 +38,40 @@ const Admin_Page = () => {
     handleEditFormSubmit();
   };
 
-  const handleDeleteClick = (appointment) => {
-    // Perform delete logic here
-  
-    // For example, you can filter out the selected appointment and update the state
-    const updatedAppointments = appointments.filter(
-      (item) => item.appointment_id !== appointment.appointment_id
+  const handleEditFormSubmit = () => {
+    // Update the selected appointment in the state
+    const updatedAppointments = appointments.map((appointment) =>
+      appointment === selectedAppointment
+        ? { ...selectedAppointment, status: editedStatus }
+        : appointment
     );
     setAppointments(updatedAppointments);
-  
-    // Perform the delete operation on the server
-    deleteAppointment(appointment);
+    setSelectedAppointment(null);
+
+    // Update the appointment on the server
+    updateAppointment(selectedAppointment);
   };
 
-
-
-  const deleteAppointment = async (appointment) => {
+  const updateAppointment = async (editedData) => {
     try {
-      const response = await fetch(`http://localhost:3000/deleteAppointment/${appointment.appointment_id}`, {
-        method: 'DELETE',
+      const response = await fetch('http://localhost:3000/updateAppointment', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(editedData),
       });
-  
+   
       if (response.ok) {
-        console.log('Appointment deleted successfully');
+        console.log('Appointment updated successfully');
       } else {
-        console.error('Error deleting appointment:', response.statusText);
+        console.error('Error updating appointment:', response.statusText);
       }
     } catch (error) {
-      console.error('Error deleting appointment:', error);
+      console.error('Error updating appointment:', error);
     }
-  };
-  
+   };
+   
 
   return (
     <div className="admin-container">
@@ -89,7 +89,8 @@ const Admin_Page = () => {
               <th>Date</th>
               <th>Time</th>
               <th>Note</th>
-              <th>Delete</th>
+              <th>Status</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody>
@@ -104,16 +105,26 @@ const Admin_Page = () => {
                 <td>{appointment.date}</td>
                 <td>{appointment.time}</td>
                 <td>{appointment.note}</td>
-               
                 <td>
-  {isEditing && selectedAppointment === appointment ? (
-    <button onClick={handleSaveClick}>Save</button>
-  ) : (
-    <>
-      <button onClick={() => handleDeleteClick(appointment)}>Delete</button>
-    </>
-  )}
-</td>
+                  {isEditing && selectedAppointment === appointment ? (
+                    <Select
+                      value={editedStatus}
+                      onChange={(e) => setEditedStatus(e.target.value)}
+                    >
+                      <MenuItem value="Approved">Approved</MenuItem>
+                      <MenuItem value="Declined">Declined</MenuItem>
+                    </Select>
+                  ) : (
+                    appointment.status
+                  )}
+                </td>
+                <td>
+                  {isEditing && selectedAppointment === appointment ? (
+                    <button onClick={handleSaveClick}>Save</button>
+                  ) : (
+                    <button onClick={() => handleEditClick(appointment)}>Edit</button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -124,4 +135,4 @@ const Admin_Page = () => {
   );
 };
 
-export default Admin_Page;
+export default DoctorPage;

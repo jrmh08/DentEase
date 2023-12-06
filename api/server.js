@@ -8,14 +8,16 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 const port = 3000;
-const secretKey = 'your-secret-key'; // Change this to a secure secret key
+const secretKey = '987654321'; // Change this to a secure secret key
+
+////////// LOLLLLLLLLLLLLLLLLLLLLLLLL
 
 app.use(cors());
 app.use(express.json());
 
 // Use express-session for session management
 app.use(session({
-  secret: 'your-secret-key',
+  secret: secretKey,
   resave: false,
   saveUninitialized: true
 }));
@@ -49,15 +51,9 @@ app.get('/logout', (req, res) => {
   });
 });
 
-
-// Login route
+// Login route with JWT
 app.post("/login", async (req, res) => {
-  console.log("Received login request:", req.body);
-
   const { loginEmail, loginPassword } = req.body;
-
-  console.log("Login email:", loginEmail);
-  console.log("Login password:", loginPassword);
 
   const loginUserQuery = "SELECT * FROM `login/register` WHERE user_email = ?";
   db.query(loginUserQuery, [loginEmail], async (err, result) => {
@@ -65,27 +61,30 @@ app.post("/login", async (req, res) => {
       console.error("Error logging in user:", err);
       res.status(500).send("Error logging in user");
     } else if (result.length > 0) {
-      // User found, now compare hashed password
       const hashedPasswordInDB = result[0].user_password;
-
-      console.log("CH",hashedPasswordInDB)
 
       try {
         const passwordMatch = await bcrypt.compare(loginPassword, hashedPasswordInDB);
-        console.log(passwordMatch)
         if (passwordMatch) {
-          console.log("=======================");
-          console.log("User logged in successfully");
-          console.log("User ID:", result[0].user_id);
-          console.log("User Email:", result[0].user_email);
+          const token = jwt.sign({
+            userId: result[0].user_id,
+            userEmail: result[0].user_email,
+            userName: result[0].user_name,
+            userPhone: result[0].user_phone,
+            user_type: result[0].user_type, // Assuming you have a user_type field in your database ===========================================
+          }, secretKey);
+          
 
-          // No need to log the hashed password during successful login
-          // console.log("User password:", hashedPasswordInDB);
-
-          const token = jwt.sign({ userId: result[0].user_id, userEmail: result[0].user_email }, secretKey);
-          res.status(200).json({ token });
+          res.status(200).json({
+            token,
+            user: {
+              userId: result[0].user_id,
+              userName: result[0].user_name,
+              userEmail: result[0].user_email,
+              userPhone: result[0].user_phone,
+            },
+          });
         } else {
-          // Incorrect password
           console.log("=======================");
           console.log("Incorrect password");
           res.status(401).send("Invalid credentials");
@@ -95,22 +94,21 @@ app.post("/login", async (req, res) => {
         res.status(500).send("Error comparing passwords");
       }
     } else {
-      // User not found
       console.log("=======================");
       console.log("User not found");
       res.status(401).send("Invalid credentials");
     }
   });
 });
-// Register route with JWT
 
-// Register route
-app.post("/register", (req, res) => {
+// Register route with JWT
+app.post("/register", async (req, res) => {
   const {
     registerUsername,
     registerPhoneNumber,
     registerEmail,
     registerPassword,
+    userType,
   } = req.body;
 
   // Check if the email already exists
@@ -130,22 +128,25 @@ app.post("/register", (req, res) => {
         const hashedPassword = await bcrypt.hash(registerPassword, 10);
 
         // Insert the user into the database with the hashed password
-        const insertUserQuery = "INSERT INTO `login/register` (user_name, user_phone, user_email, user_password) VALUES (?, ?, ?, ?)";
-        db.query(insertUserQuery, [registerUsername, registerPhoneNumber, registerEmail, hashedPassword], (err, result) => {
+        const insertUserQuery = "INSERT INTO `login/register` (user_name, user_phone, user_email, user_password, user_type) VALUES (?, ?, ?, ?, 'patient')";
+        db.query(insertUserQuery, [registerUsername, registerPhoneNumber, registerEmail, hashedPassword, userType], (err, result) => {
           if (err) {
             console.error("Error registering user:", err);
             res.status(500).send("Error registering user");
           } else {
             // Generate a JWT token
-            const token = jwt.sign({ userId: result.insertId, userEmail: registerEmail }, secretKey);
+            const token = jwt.sign({
+              userId: result.insertId,
+              userEmail: registerEmail,
+              userName: registerUsername,
+              userPhone: registerPhoneNumber,
+              user_type: userType, // or 'admin' or any other role ==================================================================
+            }, secretKey);
 
             // Log user information
             console.log("User registered successfully");
             console.log("User ID:", result.insertId);
             console.log("User Email:", registerEmail);
-
-            // No need to log the hashed password during registration
-            // console.log("User Password:", hashedPassword);
 
             console.log("=======================");
             res.status(200).json({ token });
@@ -158,6 +159,38 @@ app.post("/register", (req, res) => {
     }
   });
 });
+
+// New endpoint to get user data
+app.get('/getUser', (req, res) => {
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+  console.log(token);
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const decodedToken = jwt.verify(token, secretKey);
+
+    const { userId, userEmail, userName, userPhone, user_type } = decodedToken;
+
+    res.status(200).json({
+      userId,
+      userName,
+      userEmail,
+      userPhone,
+      user_type,
+    });
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+});
+
+// ... (your existing routes for other functionalities)
+
+
 
 
 //APPOINTMENTS SIDE
@@ -207,6 +240,67 @@ app.get('/getUser', (req, res) => {
 });
 
 
+
+
+ //// CHECKPOINT
+
+
+ app.get('/getAllAppointments', (req, res) => {
+  db.query('SELECT * FROM `appointment_table`', (err, data) => {
+    if (err) {
+      console.error('Error retrieving appointments:', err);
+      res.status(500).send('Error retrieving appointments');
+    } else {
+      res.status(200).json(data);
+    }
+  });
+});
+
+
+
+
+
+
+
+app.delete('/deleteAppointment/:id', (req, res) => {
+  const appointmentId = req.params.id;
+
+  db.query('DELETE FROM `appointment_table` WHERE appointment_id = ?', [appointmentId], (err, result) => {
+    if (err) {
+      console.error('Error deleting appointment:', err);
+      res.status(500).send('Error deleting appointment');
+    } else {
+      console.log(`Appointment with ID ${appointmentId} deleted successfully`);
+      res.status(200).send(`Appointment with ID ${appointmentId} deleted successfully`);
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Start the server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -9,9 +9,10 @@ import DentistsPage from "./Pages/Dentists";
 import ServicePage from "./Pages/OurServices";
 import LoginPage from "./Pages/LoginPage";
 import ProfilePage from "./Pages/CustomerProfile";
-import ContactPage from "./Pages/Contact";
 import MakeAppointments from "./Pages/MakeAppointments";
 import Admin_Page from "./Pages/AdminPage";
+import DentistPage from "./Pages/DentistPage";
+
 
 import "./App.css";
 
@@ -29,17 +30,21 @@ function App() {
           {isAuthenticated ? (
             <> 
             
+              <Route path="/admin" element={<Admin_Page />} /> 
               <Route path="/home" element={<Homepage />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/dentists" element={<DentistsPage />} />
               <Route path="/service" element={<ServicePage />} />
-              <Route path="/contact" element={<ContactPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/appointments" element={<MakeAppointments />} />
-              <Route path="/admin" element={<Admin_Page />} />
+
+               <Route path="/dentist" element={<DentistPage />} />
+
+
+
+
             </>
           ) : (
-            // If not authenticated, navigate to LoginPage
             <Navigate to="/login" />
           )}
         </Routes>

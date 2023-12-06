@@ -38,6 +38,7 @@
   text-decoration: none;
   font-weight: bold;
   font-size: 20px;
+  padding: 30px 0px;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -128,21 +129,22 @@
 /* Dropdown styles */
 .dropdown-menu {
   position: absolute;
-  background-color: #1c89c0;
+  background-color: #28769c;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  right:6%;
+  right:8rem;
   z-index: 1000;
  padding:11px;
  
 }
 
 .notifications-dropdown {
+  color: white;
   position: absolute;
   background-color: #357ca0;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  right:6rem;
+  right: 13rem;
   z-index: 1000;
   padding:11px;
 
