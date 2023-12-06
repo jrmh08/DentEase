@@ -185,7 +185,12 @@ function LoginPage() {
           console.log('Login form submitted successfully');
           setSuccessMessage('Logged in successfully!');
           removeSuccessMessage();
-          navigate('/home');
+          // 
+
+            let res = await response.json();
+            console.log(res);
+            localStorage.setItem("token",res.token);
+           navigate('/home');
         } else if (response.status === 401) {
           console.log(response)
           console.log('Invalid credentials');

@@ -1,62 +1,85 @@
-// app.jsx
-import React, { useState } from 'react';
-import '../Styles/CustomerProfile.css';
+import React, { useState, useEffect } from 'react';
+// import jwt_decode from 'jwt-decode';
 import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
+import '../Styles/CustomerProfile.css';
+
 const ProfilePage = () => {
-  const [editMode, setEditMode] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    userID: '',
+    user_ID: '',
     Name: '',
     Email: '',
     PhoneNo: '',
   });
-  const [validEmail, setValidEmail] = useState(true);
 
-  const handleEditClick = () => {
-    setEditMode(true);
-  };
+  useEffect(() => {
+    console.log("sadddd");
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem('token');
+      console.log(token);
 
-  const handleSaveClick = () => {
-    setEditMode(false);
-    // In a real application, you would send an API request to update user data on the server
-  };
+      if (token) {
+        try {
+          const response = await fetch('http://localhost:3000/getUser', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log(response);
+          if (response.ok) {
+            const data = await response.json();
+            setUserInfo({
+              user_ID: data.userId,
+              Name: data.userName,
+              Email: data.userEmail,
+              PhoneNo: data.userPhone,
+            });
+          } else {
+            console.error('Failed to fetch user information');
+          }
+        } catch (error) {
+          console.error('Error fetching user information:', error);
+        }
+      }
+    };
 
-  const handleInputChange = (e, key) => {
-    let value = e.target.value;
+    fetchUserInfo();
+  }, []);
 
-    // Validate input based on the key
-    switch (key) {
-      case 'userID':
-        // Allow only numbers
-        value = value.replace(/\D/g, '');
-        break;
-      case 'Name':
-        // Allow only letters and spaces
-        value = value.replace(/[^a-zA-Z\s]/g, '');
-        break;
-      case 'Email':
-        // Validate email format
-        const validEmailCharsRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        setValidEmail(validEmailCharsRegex.test(value) || value === ''); // Empty string is considered valid
-        break;
-      case 'PhoneNo':
-        // Allow only numbers and ensure length is 11 digits
-        value = value.replace(/\D/g, '').substring(0, 11);
-        break;
-      default:
-        break;
+  const postData = async () => {
+    try {
+      const formData = { /* Your form data here */ };
+      const token = localStorage.getItem('token');
+
+      if (token) {
+        const response = await fetch('http://localhost:3000/getUser', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('POST request successful:', result);
+          // Handle the response as needed
+        } else {
+          console.error('Failed to make POST request');
+        }
+      } else {
+        console.error('Token not found. User may not be logged in.');
+      }
+    } catch (error) {
+      console.error('Error making POST request:', error);
     }
-
-    setUserInfo({
-      ...userInfo,
-      [key]: value,
-    });
   };
 
   return (
     <div className="profile-page-container">
-          <NavBar />
+      <NavBar />
       <div className="profile-container">
         <div className="profile-header-container">
           <div className="profile-info-container">
@@ -66,21 +89,11 @@ const ProfilePage = () => {
                 alt="Profile"
                 className="profile-picture"
               />
-              {editMode && (
-                <div className="change-photo-popup">
-                  <p>Change photo</p>
-                </div>
-              )}
             </div>
             <div className="profile-text-container">
               <p>{userInfo.Name}</p>
               <p>Status: Patient</p>
             </div>
-          </div>
-          <div className="edit-profile-btn-container">
-            <button className="edit-profile-btn" onClick={handleEditClick}>
-              Edit Profile
-            </button>
           </div>
         </div>
         <div className="profile-details-container">
@@ -88,30 +101,13 @@ const ProfilePage = () => {
             {Object.entries(userInfo).map(([key, value]) => (
               <div className="detail-row" key={key}>
                 <label className="detail-label">{key}:</label>
-                {editMode ? (
-                  <input
-                    type="text"
-                    value={value}
-                    onChange={(e) => handleInputChange(e, key)}
-                    className={`edit-input ${key === 'Email' && !validEmail ? 'invalid-email' : ''}`}
-                  />
-                ) : (
-                  <span className="detail-text">{value}</span>
-                )}
+                <span className="detail-text">{value}</span>
               </div>
             ))}
           </div>
         </div>
-        {editMode && (
-          <div className="save-button-container">
-            <button className="save-button" onClick={handleSaveClick}>
-              Save Changes
-            </button>
-          </div>
-        )}
       </div>
-      <Footer/>
-
+      <Footer />
     </div>
   );
 };
