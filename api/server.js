@@ -180,24 +180,31 @@ app.post('/addAppointment', (req, res) => {
   })
 })
 
+app.get('/getUser', (req, res) => {
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
+  console.log(token);
 
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
+  try {
+    const decodedToken = jwt.verify(token, secretKey);
 
+    const { userId, userEmail, userName, userPhone } = decodedToken;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    res.status(200).json({
+      userId,
+      userName,
+      userEmail,
+      userPhone,
+    });
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+});
 
 
 app.listen(port, () => {
