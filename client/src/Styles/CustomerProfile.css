@@ -1,29 +1,17 @@
 
-/* body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #dbeffa;
-} */
-
-/* .profile-page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-size: 16px;
-}   */
-
-
 
 .profile-page-container {
-  background-color: #f4f4f4;
+  background-color: #ffffff;
+  opacity: 1;
+  background-image:  radial-gradient(#459bf7 1.2000000000000002px, transparent 1.2000000000000002px), radial-gradient(#459bf7 1.2000000000000002px, #ffffff 1.2000000000000002px);
+  background-size: 48px 48px;
+  background-position: 0 0,24px 24px;;
   color: #333;
   /* padding: 20px; ayaw ni hilabta */ 
   font-family: poppins, sans-serif;
   margin: 0;
   min-height: 100vh;
-  width: 100vw; /* Set width to 100% of the viewport width */
+  width: 100vw; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,18 +19,18 @@
  }
  
    
-
-.profile-container {
+ .profile-container {
   background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 8px;
   width: 80%;
   position: relative;
   font-weight: bold;
-  margin:10%;
+  margin: 10%;
+  box-shadow: 0 0 20px rgba(2, 109, 153, 0.1), 0 0 40px rgba(2, 109, 153, 0.3); 
 
 }
+
 
 .profile-header-container {
   display: flex;
@@ -80,11 +68,11 @@
   border-radius: 10px;
   margin-left: 53px;
   font-weight: normal;
-  transition: background-color 0.3s ease; /* Add transition effect */
+  transition: background-color 0.3s ease; 
 }
 
 .change-photo-popup:hover {
-  background-color: #026d99; /* Change color on hover */
+  background-color: #026d99; 
 }
 
 .profile-text-container {
@@ -165,8 +153,4 @@
 
 .save-button:hover {
   background-color: #026d99;
-}
-
-.invalid-email {
-  border: 1px solid red;
 }

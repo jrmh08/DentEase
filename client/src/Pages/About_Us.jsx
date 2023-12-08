@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../Styles/About_Us.css';
 import NavBar from '../Component/Nav_Bar';
 import Footer from '../Component/Footer';
@@ -15,11 +16,11 @@ const AboutUs = () => {
 
           <h1>About Us</h1>
           <p>
-            Our passion at Aurora Dental is to help kids and families achieve optimal oral health. We also seek to educate patients about the importance of getting regular dental care so they can smile brighter for a lifetime. Because we think that quality dental care should be within everyone’s reach, we follow the Alberta Dental Fee Guide, charging no extra.
+          Welcome to DentEase Dental Clinic, where your smile is our priority. At DentEase, we seamlessly blend advanced dental care with modern convenience, offering a patient-centric approach through innovative solutions like DentEase Booking. Our commitment extends beyond treatment – it's about making your oral health journey effortless and aligned with your contemporary lifestyle. Discover a dental experience that prioritizes your well-being and embraces the future of dentistry at DentEase Dental Clinic.
           </p>
-          <h3>Planting Roots in SE Edmonton</h3>
+          <h3>Planting Roots in Talamban</h3>
           <p>
-            Delighted to open Aurora Dental, a brand-new dental clinic, Dr. Rakhee Parmar, Dr. Paul Delhon, and Dr. Travis Elliott are happy to be a part of our growing community. They are looking to make a long-term investment here. “I want to take care of the smiles of friends and neighbors for decades to come,” Dr. Rakhee said.
+          Nurturing smiles and planting roots in Talamban, DentEase Dental Clinic is proud to be your trusted local dental care destination. Our commitment to exceptional oral health extends to the heart of the community we serve, ensuring that every patient feels at home while receiving top-notch dental care. Just as our roots deepen in Talamban, so does our dedication to providing personalized, modern, and accessible dentistry for you and your family. 
           </p>
         </div>
         <div className="image-column">
@@ -56,15 +57,15 @@ const AboutUs = () => {
           One of our greatest passions is helping children adopt good oral hygiene habits so they can keep their teeth healthy and their smiles lovely.
         </p>
 
-        <a href="https://www.roblox.com/home" target="_blank" rel="noopener noreferrer" className="meet-dentists-btn">
-          MEET OUR DENTISTS
-        </a>
+        <Link to="/service" className="meet-dentists-btn">
+          MEET OUR DENTISTS 
+      </Link>
       </div>
 
       <div className="bottom-feature">
         <h2>Providing an Array of Services</h2>
         <p>
-          You don’t have to visit several dental offices to get the care you need. We offer patients many high-quality dental services in one convenient location:
+          You don’t have to visit several dental offices to get the care you need. We offer patients many high-quality dental services in one convenient location at Gov. M. Cuenco Ave, Cebu City, 6000 Cebu.
         </p>
       </div>
 

@@ -92,7 +92,7 @@ const ProfilePage = () => {
           <div className="profile-info-container">
             <div className="profile-picture-container">
               <img
-                src="https://via.placeholder.com/200"
+                src="https://media.discordapp.net/attachments/1037764932747403276/1182686418485653504/60111.jpg?ex=6585998f&is=6573248f&hm=9cf4d7d690a4dab6dabfe01bcfb6a631fa16111c92b0d42a15f195495533bd99&=&format=webp&width=889&height=889"
                 alt="Profile"
                 className="profile-picture"
               />

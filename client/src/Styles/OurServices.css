@@ -1,24 +1,13 @@
-/* .Service-page {
-  background-color: #f4f4f4;
-  color: #333;
-  padding: 10px;
-  font-family: poppins, sans-serif;
-  margin: 0;
-  min-height: 100vh;
-  width: 100vw; /* Set width to 100% of the viewport width /*
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
- } */
 
-
-
-  .Service-Paragraph{
-    font-size: 20px;
+.Service-Paragraph{
+    font-size: 25px;
     text-align: center;
-    max-width: 800px; /* Set a maximum width for the paragraph */
-    margin: 20px; /* Add some margin to the paragraph */
+    max-width: 800px; 
+    margin: 20px; 
+    color: #207cc7;
+    background-color: white;
+    margin-top: 40px;
+    
   }
   
 .Service-container {
@@ -27,10 +16,15 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin: 25px;
   padding: 25px;
   border-radius: 8px;
+  margin-bottom: 15px;
 }
+
+.Service-container h1{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 
 .Service-Card {
   background-size: cover;
@@ -56,16 +50,18 @@
   align-items: center;
 }
   .Service-Card h1 {
-    font-size: 45px; /* Adjust font size for the title */
-    white-space: nowrap; /* Prevent line breaks */
-    overflow: hidden; /* Hide overflowing content */
-    text-overflow: ellipsis; /* Display ellipsis (...) for overflow */
+    font-size: 45px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    color: #207cc7;
+    
   }
   
 .Service-Card ul li {
   padding: 35px;
-  margin: 15px; /* Adjust margin for responsiveness */
-  max-width: calc(33.33% - 20px); /* Set the maximum width for responsiveness (3 items per row) */
+  margin: 15px; 
+  max-width: calc(33.33% - 20px); 
   height: 8rem;
   width: 10rem;
   text-align: center;
@@ -81,56 +77,58 @@
   visibility: hidden;
   opacity: 0;
   position: absolute;
-  white-space: nowrap; /* Prevent line breaks */
-  overflow: hidden; /* Hide overflowing content */
+  white-space: nowrap; 
+  overflow: hidden; 
   text-overflow: ellipsis; 
   display: flex;
-  background-color: #f9f9f9;
+  background-color: #e5e5f7;
+  opacity: 0.8;
+  background-image: radial-gradient(#459bf7 0.5px, #e5e5f7 0.5px);
+  background-size: 10px 10px;
   padding: 7px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 17px;
-  left: 50%; /* Horizontal centering */
-  transform: translateY(-50%) translateX(-50%); /* Initial position at the bottom */
+  left: 50%; 
+  transform: translateY(-50%) translateX(-50%); 
   transition: transform 0.7s ease-in, opacity 0.8s linear;
 }
 
 
 .Service-Card ul li:hover {
   transform: scale(1.2);
-  background-color: #f0f0f0; /* Change the background color on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Adjust the box-shadow on hover */
+  background-color: #f0f0f0; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
 }
 
 .Service-Card ul li:hover .title-box {
   visibility: visible;
   opacity: 1;
-  transform: translateY(100%) translateX(-50%); /* Move to the center */
+  transform: translateY(100%) translateX(-50%); 
 
   }
 
   .Service-Card h1 {
-    font-size: 45px; /* Default font size for larger screens */
-    white-space: nowrap; /* Prevent line breaks */
-    overflow: hidden; /* Hide overflowing content */
-    text-overflow: ellipsis; /* Display ellipsis (...) for overflow */
+    font-size: 45px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
   }
 
   @media (max-width:900px) {
     .Service-Card ul {
-      flex-direction: column; /* Change flex direction for smaller screens */
-      align-items: center; /* Center items for smaller screens */
+      flex-direction: column; 
+      align-items: center; 
     }
   
     .Service-Card ul li {
-      margin: 10px; /* Adjust margin for smaller screens */
-      max-width: 100%; /* Allow items to take full width on smaller screens */
+      margin: 10px; 
     }
     .title-box {
-      font-size: 14px; /* Adjust font size for smaller screens */
-      padding: 5px; /* Adjust padding for smaller screens */
+      font-size: 14px; 
+      padding: 5px; 
     }
     .Service-Card h1 {
-      font-size: 30px; /* Adjust font size for smaller screens */
+      font-size: 30px; 
     }
   }

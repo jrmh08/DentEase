@@ -5,16 +5,13 @@
   font-family: poppins, sans-serif;
   margin: 0;
   height: 100vh;
-  width: 100vw; /* Set width to 100% of the viewport width */
+  width: 100vw;
  
  }
-
-
  .admin-delete:hover{
-    background-color: red;
- }
+  background-color: red;
+}
 
-  
   .edit-button {
     margin: 10px;
   }
@@ -39,6 +36,8 @@
   
   .appointment-table {
     width: 50%;
+    margin-bottom: 29%;
+
    
   }
   

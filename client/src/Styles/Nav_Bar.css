@@ -2,14 +2,14 @@
 .navbar {
 
   background-color: #262c2f;
-  position: relative; /* Fix the navbar position */
+  position: relative; 
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100; /* Set a high z-index to ensure it appears above other elements */
-  width: 100%; /* Set width to 100% of the viewport width */
-  padding: 10px 0; /* Add padding to the top and bottom */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+  z-index: 100;
+  width: 100%; 
+  padding: 1px 0; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 .navbar-container {
@@ -27,7 +27,7 @@
 
 .navbar ul li {
   display: inline;
-  margin: 0 15px; /* Adjusted margin */
+  margin: 0 15px; 
   padding: 10px 20px;
   border-radius: 50px;
   transition: background-color 0.3s ease, transform 1s ease;
@@ -105,12 +105,12 @@
  
   .navbar ul.open {
     display: flex;
-    flex-direction: column; /* Display items in a column */
-    position: absolute; /* Position absolutely within the navbar */
-    top: 100%; /* Position below the navbar */
+    flex-direction: column; 
+    position: absolute; 
+    top: 100%; 
     left: 0;
     width: 100%;
-    background-color: #262c2f; /* Match the navbar background color */
+    background-color: #262c2f;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 }

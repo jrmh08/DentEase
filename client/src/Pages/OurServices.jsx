@@ -79,7 +79,6 @@ const ServicePage = () => {
          </div>
        ))}
      </div>
-     <h1>DentEase Dental Services</h1>
      <p className="Service-Paragraph">DentEase Dental Services provides personalized and compassionate dental care, ensuring a confident smile through expertise and dedication. Our professional team offers top-notch treatments in a warm, welcoming environment, enhancing your oral health and overall well-being.</p>
      <div className="Service-container">
        {services.map((service, serviceIndex) => (

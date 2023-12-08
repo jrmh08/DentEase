@@ -1,3 +1,5 @@
+// LoginPage.jsx
+
 import React, { useState } from 'react';
 import '../Styles/Login_Page.css';
 
@@ -7,7 +9,7 @@ const Logo = () => (
   <img src="dentease.png" alt="Logo" style={{ width: '100px', height: 'auto' }} />
 );
 
-const LoginForm = ({ onSubmit, onSwitchForm, formData, onInputChange }) => (
+const LoginForm = ({ onSubmit, onSwitchForm, formData, onInputChange, errorMessage, successMessage }) => (
   <div className="form-container">
     <h2 className="h2">Login</h2>
     <form className="form" onSubmit={onSubmit}>
@@ -43,11 +45,14 @@ const LoginForm = ({ onSubmit, onSwitchForm, formData, onInputChange }) => (
           Register
         </button>
       </p>
+      {/* Move messages to the bottom */}
+      <div className={`error-message ${!errorMessage ? 'error-message-hidden' : ''}`}>{errorMessage}</div>
+      <div className={`success-message ${!successMessage ? 'success-message-hidden' : ''}`}>{successMessage}</div>
     </form>
   </div>
 );
 
-const RegisterForm = ({ onSubmit, onSwitchForm, formData, onInputChange }) => (
+const RegisterForm = ({ onSubmit, onSwitchForm, formData, onInputChange, errorMessage, successMessage }) => (
   <div className="form-container">
     <h2 className="h2">Register</h2>
     <form className="form" onSubmit={onSubmit}>
@@ -120,6 +125,9 @@ const RegisterForm = ({ onSubmit, onSwitchForm, formData, onInputChange }) => (
           Login
         </button>
       </p>
+      {/* Move messages to the bottom */}
+      <div className={`error-message ${!errorMessage ? 'error-message-hidden' : ''}`}>{errorMessage}</div>
+      <div className={`success-message ${!successMessage ? 'success-message-hidden' : ''}`}>{successMessage}</div>
     </form>
   </div>
 );
@@ -185,14 +193,12 @@ function LoginPage() {
           console.log('Login form submitted successfully');
           setSuccessMessage('Logged in successfully!');
           removeSuccessMessage();
-          // 
-
-            let res = await response.json();
-            console.log(res);
-            localStorage.setItem("token",res.token);
-           navigate('/home');
+          let res = await response.json();
+          console.log(res);
+          localStorage.setItem('token', res.token);
+          navigate('/home');
         } else if (response.status === 401) {
-          console.log(response)
+          console.log(response);
           console.log('Invalid credentials');
           setErrorMessage('Invalid credentials. Please try again.');
           removeErrorMessage();
@@ -235,8 +241,7 @@ function LoginPage() {
           console.log('Email already exists');
           setErrorMessage('Email already exists. Please use a different email.');
           removeErrorMessage();
-        } else
-        {
+        } else {
           console.error('Error submitting register form:', response.statusText);
           setErrorMessage('An error occurred. Please try again later.');
           removeErrorMessage();
@@ -272,6 +277,8 @@ function LoginPage() {
             onSwitchForm={handleSwitchForm}
             formData={formData}
             onInputChange={handleInputChange}
+            errorMessage={errorMessage}
+            successMessage={successMessage}
           />
         )}
         {!loginForm && (
@@ -280,6 +287,8 @@ function LoginPage() {
             onSwitchForm={handleSwitchForm}
             formData={formData}
             onInputChange={handleInputChange}
+            errorMessage={errorMessage}
+            successMessage={successMessage}
           />
         )}
       </div>
