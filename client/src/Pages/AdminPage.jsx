@@ -114,7 +114,7 @@ const Admin_Page = () => {
     <button onClick={handleSaveClick}>Save</button>
   ) : (
     <>
-      <button onClick={() => handleDeleteClick(appointment)}>Delete</button>
+      <button className="admin-delete" onClick={() => handleDeleteClick(appointment)}>Delete</button>
     </>
   )}
 </td>
