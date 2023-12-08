@@ -25,7 +25,7 @@
 
 .appointment-area{
     width: 100%;
-    background: linear-gradient(45deg, #2490EB 25%, transparent 25%, transparent 75%, #2490EB 75%);
+    background: linear-gradient(45deg, #2490EB 20%, transparent 20%, transparent 70%, #2490EB 70%);
     display: flex;
     justify-content: center;
     margin-top: 5rem;

@@ -1,3 +1,10 @@
+.dentist-paragraph{
+  background-color: #f4f4f4;
+  padding: 10pt;
+  border-color: #f4f4f4;
+  border-radius: 10pt;
+}
+
 
 .Service-Paragraph{
     font-size: 25px;
@@ -5,9 +12,11 @@
     max-width: 800px; 
     margin: 20px; 
     color: #207cc7;
-    background-color: white;
+    background-color: #f4f4f4;
     margin-top: 40px;
-    
+    padding: 10pt;
+    border-color: #f4f4f4;
+    border-radius: 10pt;
   }
   
 .Service-container {
