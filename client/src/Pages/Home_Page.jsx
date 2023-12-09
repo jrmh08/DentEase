@@ -8,9 +8,9 @@ import Footer from '../Component/Footer';
 const Homepage = () => {
   const [notifications, setNotifications] = useState(['No New Notifications']);
   const images = [
-    'https://cdn.discordapp.com/attachments/698869917235019828/1179515281035505895/Dentist_2.jpg?ex=657a1035&is=65679b35&hm=f752e3cc628f9923c1b3f072a5b56f934cef85d17c2e47438eac5a5a22b97afe&',
-    'https://assets.speareducation.com/digest/2018/12/how-to-talk-to-dental-patients-about-money-with-confidence/DigestIMG-Money-With-Confidence.jpg',
-    'https://media.discordapp.net/attachments/1037764932747403276/1182532930875174962/dental-sealants-work-for-an-adult-and-prevent-tooth-decay.png?ex=65850a9d&is=6572959d&hm=2baf3d7255e319051583b26d40ec9b3c8910465d8ff51f6c20467a116bed479d&=&format=webp&quality=lossless&width=1333&height=889'
+    '../pictures/carousel_1.jpg',
+    '../pictures/carousel_2.jpg',
+    '../pictures/carousel_3.webp'
   ];
 
   const texts = [
@@ -71,7 +71,7 @@ const Homepage = () => {
         <div className="facility-boxes">
           <div className="facility-box left-box">
             <img
-              src="https://cdn.discordapp.com/attachments/698869917235019828/1179535127076945961/endo.jpg?ex=657a22b0&is=6567adb0&hm=245fc467d292f73338e45ba61bb6a4f63da2eeaa7dfebb8b39bbdf56629f4387&"
+              src="../pictures/carousel1.jpg"
               alt="Orthodontist Image"
               className="facility-image"
             />
@@ -85,7 +85,7 @@ const Homepage = () => {
           </div>
           <div className="facility-box middle-box">
             <img
-              src="https://cdn.discordapp.com/attachments/698869917235019828/1179534932062777465/orthodontist.jpg?ex=657a2282&is=6567ad82&hm=6268a0bbedb45677a8cb4e7d45ae34271028e0892723614035d622d9329c76e2&"
+              src="../pictures/carousel2.jpg"
               alt="Periodontist Image"
               className="facility-image"
             />
@@ -100,7 +100,7 @@ const Homepage = () => {
           </div>
           <div className="facility-box right-box">
             <img
-              src="https://cdn.discordapp.com/attachments/698869917235019828/1179534643364642836/periodontist.jpg?ex=657a223d&is=6567ad3d&hm=ef014f20b0c9b23dd370919ec9bbbd5e0df03fb5611583fad2492b98a9342cc0&"
+              src="../pictures/carousel3.jpg"
               alt="Endodontist Image"
               className="facility-image"
             />

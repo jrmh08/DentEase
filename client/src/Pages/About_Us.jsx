@@ -24,7 +24,7 @@ const AboutUs = () => {
           </p>
         </div>
         <div className="image-column">
-          <img src="https://cdn.discordapp.com/attachments/1029043565868884061/1175680463306768474/sign-outside.jpg?ex=656c1cc1&is=6559a7c1&hm=0c15a0dc64ed6b2b9dfd00b8ec719e5671b17c80bc4ea02b9ddd3665ee0e5f19&" alt="Your Image" className="circular-image" />
+          <img src="../pictures/aurora_dental.jpg" alt="Your Image" className="circular-image" />
         </div>
       </div>
 
